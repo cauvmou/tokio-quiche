@@ -79,7 +79,6 @@ impl Inner {
         }
     }
 
-    // TODO: THIS SHIT IS HELLA SUS NO CAP FRFR
     pub fn poll_io_complete(
         &mut self,
         cx: &mut std::task::Context<'_>,

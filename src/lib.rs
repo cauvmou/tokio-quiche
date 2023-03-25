@@ -58,6 +58,8 @@ pub mod config;
 pub mod connection;
 mod crypto;
 pub mod stream;
+#[cfg(feature = "http")]
+pub mod h3;
 
 #[derive(Debug)]
 pub enum Message {

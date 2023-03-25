@@ -13,6 +13,7 @@ tokio = { version = "1", features = ["full"] }
 tokio-timer = "^0.2.13"
 quiche = { version = "^0.16.0", features = ["boringssl-boring-crate"] }
 boring = { version = "2.1.0", optional = true }
+ls-qpack = { version = "0.1.0-alpha", optional = true }
 pollster = "^0.3.0"
 rust-crypto = "^0.2"
 chrono = "^0.4.23"
@@ -25,5 +26,6 @@ simple_logger = "*"
 boring = "2.1.0"
 
 [features]
-default = ["key-gen"]
+default = ["http", "key-gen"]
 key-gen = ["dep:boring"]
+http = ["dep:ls-qpack"]

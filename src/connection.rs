@@ -11,7 +11,7 @@ use tokio::{
 use crate::{
     backend::{client, server},
     stream::QuicStream,
-    Message,
+    Message, h3::HttpConnection,
 };
 
 pub trait Backend {}
@@ -31,14 +31,14 @@ impl Backend for Server {}
 /// connection.incoming().await.unwrap();
 /// ```
 /// Waits for an incoming stream from remote.
-pub struct QuicConnection<T: Backend + Send> {
+pub struct QuicConnection<B: Backend + Send> {
     #[allow(unused)]
     handle: JoinHandle<Result<(), io::Error>>,
     stream_map: Arc<Mutex<HashMap<u64, UnboundedSender<Result<Message, quiche::Error>>>>>, // Map each stream to a `Sender`
     stream_next: Arc<Mutex<u64>>,           // Next available stream id
     message_send: UnboundedSender<Message>, // This is passed to each stream.
     incoming_recv: UnboundedReceiver<QuicStream>,
-    state: PhantomData<T>,
+    state: PhantomData<B>,
 }
 
 impl QuicConnection<Server> {
@@ -172,5 +172,11 @@ impl QuicConnection<Client> {
         map.insert(id, tx);
         *next += 1;
         stream
+    }
+}
+
+impl<B: Backend + Send> QuicConnection<B> {
+    pub async fn upgrade(self) -> Result<HttpConnection<B>, io::Error> {
+        HttpConnection::new(self).await
     }
 }
