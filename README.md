@@ -8,8 +8,6 @@ Async QUIC Listener/Socket for [tokio](https://tokio.rs/) using [quiche](https:/
 - [x] QuicSocket for client use.
 - [x] Boringssl key generation (Can be disabled by disabling the default features).
 - [ ] Http3 support.
-- [ ] Swappable backend (quiche & quinn) for boringssl and openssl support.
-- [ ] Unified config for both implementations.
 
 ## Examples
 
